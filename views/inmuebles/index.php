@@ -1,5 +1,7 @@
 <?php
 
+use yii\grid\DataColumn;
+
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -11,8 +13,8 @@ $this->title = 'Inmuebles';
 $this->params['breadcrumbs'][] = $this->title;
 $js = <<<EOT
     $('.interesado').click(function(event) {
-        $(this).text($(this).data('telefono'));
-        $(this).removeClass('interesado');
+        tlf = $(this).parents('tr').find('.telefono').first();
+        tlf.css({visibility: 'visible'});
     });
 EOT;
 $this->registerJs($js);
@@ -35,7 +37,14 @@ $this->registerJs($js);
             'lavavajillas:boolean',
             'garaje:boolean',
             'trastero:boolean',
-//            'propietario.telefono',
+            [
+                'attribute' => 'propietario.telefono',
+                'content' => function ($model, $key, $index, $column) {
+                    return '<span class="telefono" style="visibility: hidden">'
+                        . $model->propietario->telefono
+                        . '</span>';
+                },
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {update} {delete} {interesado}',
@@ -43,9 +52,9 @@ $this->registerJs($js);
                     'interesado' => function ($url, $model, $key) {
                         return Html::button('Interesado', [
                             'class' => 'btn-xs btn-success interesado',
-                            'data' => [
-                                'telefono' => $model->propietario->telefono,
-                            ],
+                            // 'data' => [
+                            //     'telefono' => $model->propietario->telefono,
+                            // ],
                         ]);
                     },
                 ],
