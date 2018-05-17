@@ -1,7 +1,5 @@
 <?php
 
-use yii\grid\DataColumn;
-
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -13,8 +11,8 @@ $this->title = 'Inmuebles';
 $this->params['breadcrumbs'][] = $this->title;
 $js = <<<EOT
     $('.interesado').click(function(event) {
-        tlf = $(this).parents('tr').find('.telefono').first();
-        tlf.css({visibility: 'visible'});
+        tlf = $(this).parents('tr').find('.telefono'); // .first();
+        tlf.show();
     });
 EOT;
 $this->registerJs($js);
@@ -40,7 +38,7 @@ $this->registerJs($js);
             [
                 'attribute' => 'propietario.telefono',
                 'content' => function ($model, $key, $index, $column) {
-                    return '<span class="telefono" style="visibility: hidden">'
+                    return '<span class="telefono" style="display: none">'
                         . $model->propietario->telefono
                         . '</span>';
                 },
